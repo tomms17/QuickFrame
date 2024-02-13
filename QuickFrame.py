@@ -147,7 +147,7 @@ class QuickFrame(pd.DataFrame):
                       or if any value in 'impute_modes' is not one of ['mean', 'mode', 'all_0', 'all_1'].
 
         Returns:
-        - pd.DataFrame: Preprocessed DataFrame.
+        - QuickFrame: Preprocessed QuickFrame.
         """
         # add option to use multi level indexing
         if not isinstance(encode, bool):
