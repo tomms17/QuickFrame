@@ -23,7 +23,8 @@ class QuickFrame(pd.DataFrame):
                       impute_modes=None, scale_data=None): Preprocess the DataFrame.
     """
 
-    def __init__(self, data=None, csv_file=None, **kwargs):
+    def __init__(self, data: Union[dict, List[str], np.ndarray] = None,
+                 csv_file=None, **kwargs):
         """
         Initialize the QuickFrame by creating a DataFrame either from data or a CSV file.
 
@@ -36,9 +37,14 @@ class QuickFrame(pd.DataFrame):
             data = pd.read_csv(csv_file, **kwargs)
         super().__init__(data)
 
-    def norm_corr_matrix(self):
+    def norm_corr_matrix(self, scale_data: str = None):
         """
         Generate a heatmap of the normalized correlation matrix for the DataFrame.
+
+        Parameters:
+        - scale_data (str, optional): Scaling method for numerical features.
+                                     Options: 'MinMaxScaler', 'RobustScaler', 'StandardScaler', or None.
+                                     Default is None.
 
         Raises:
         - ValueError: If the DataFrame is empty.
@@ -46,13 +52,29 @@ class QuickFrame(pd.DataFrame):
         Returns:
         - None: Displays a heatmap of the normalized correlation matrix.
         """
-        # add option to normalize (same as in preprocess), not inplace!!!
+        if self.empty:
+            raise ValueError("DataFrame is empty.")
+
         correlation_matrix = self.corr(numeric_only=True)
-        normalized_corr_matrix = (correlation_matrix - correlation_matrix.min().min()) / (
-                correlation_matrix.max().max() - correlation_matrix.min().min()) * 2 - 1
+        normalized_corr_matrix_display = correlation_matrix.copy()
+
+        if scale_data is not None:
+            valid_scalers = {'MinMaxScaler': MinMaxScaler,
+                             'RobustScaler': RobustScaler,
+                             'StandardScaler': StandardScaler}
+            scaler_class = valid_scalers.get(scale_data, None)
+
+            if scaler_class is not None:
+                numerical_columns = correlation_matrix.columns
+                normalized_corr_matrix_display[numerical_columns] = \
+                    scaler_class().fit_transform(correlation_matrix[numerical_columns])
+
+        normalized_corr_matrix_display = (normalized_corr_matrix_display - normalized_corr_matrix_display.min().min()) / (
+                normalized_corr_matrix_display.max().max() -normalized_corr_matrix_display.min().min()) * 2 - 1
 
         plt.figure(figsize=(10, 8))
-        sns.heatmap(normalized_corr_matrix, annot=True, cmap='coolwarm', vmin=-1, vmax=1, fmt='.2f', linewidths=0.5)
+        sns.heatmap(normalized_corr_matrix_display, annot=True, cmap='coolwarm', vmin=-1, vmax=1, fmt='.2f',
+                    linewidths=0.5)
         plt.title("Normalized Correlation Matrix (-1 to 1)")
         plt.show()
 
