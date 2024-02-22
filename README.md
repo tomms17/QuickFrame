@@ -61,4 +61,4 @@ seaborn
 scikit-learn  
 
 ## License
-This code is provided under the MIT License. Feel free to use, modify, or distribute it according to your needs.
+This code is provided under the GNU GPLv3 License. Feel free to use, modify, or distribute it according to your needs.
