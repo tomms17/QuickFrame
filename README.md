@@ -24,13 +24,13 @@ quick_frame.nan_per_column()
 quick_frame.plot_distributions(x_axis='A', exclude='B')
 
 ## Example: Preprocess data
-*preprocessed_data = quick_frame.preprocess_data(  
+preprocessed_data = quick_frame.preprocess_data(  
     set_index_as='A',  
     corr_threshold=0.5,  
     encode=True,  
     impute_modes={'B': 'mean', 'C': 'mode'},  
     scale_data='StandardScaler'  
-)*
+)
 
 ## Class Methods
 
