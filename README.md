@@ -33,31 +33,31 @@ preprocessed_data = quick_frame.preprocess_data(
 )
 
 ## Class Methods
-__init__(self, data: Union[dict, List[str], np.ndarray] = None, csv_file=None, **kwargs)
+__init__(self, data: Union[dict, List[str], np.ndarray] = None, csv_file=None, **kwargs)  
 Initialize the QuickFrame by creating a DataFrame either from data or a CSV file.
 
-norm_corr_matrix(self, scale_data: str = None)
+norm_corr_matrix(self, scale_data: str = None)  
 Generate a heatmap of the normalized correlation matrix for the DataFrame.
 
-nan_per_column(self)
+nan_per_column(self)  
 Count the number of NaN values in each column of the DataFrame.
 
-plot_distributions(self, x_axis: str = 'index', exclude: Union[str, List[str]] = None)
+plot_distributions(self, x_axis: str = 'index', exclude: Union[str, List[str]] = None)  
 Plot distributions of specified columns for each country in the DataFrame.
 
-preprocess_data(self, set_index_as: Union[str, List[str]] = None, corr_threshold: float = None, encode: bool = False, impute_modes: dict = None, scale_data: str = None)
+preprocess_data(self, set_index_as: Union[str, List[str]] = None, corr_threshold: float = None, encode: bool = False, impute_modes: dict = None, scale_data: str = None)  
 Preprocess the DataFrame by handling missing values, dropping highly correlated features, and optionally encoding categorical variables and scaling numerical features.
 
 ## Parameters and Returns
 Refer to the method docstrings for detailed information on parameters and return values.
 
 ## Requirements
-Python 3.6+
-pandas
-numpy
-matplotlib
-seaborn
-scikit-learn
+Python 3.6+  
+pandas  
+numpy  
+matplotlib  
+seaborn  
+scikit-learn  
 
 ## License
 This code is provided under the MIT License. Feel free to use, modify, or distribute it according to your needs.
