@@ -70,7 +70,7 @@ class QuickFrame(pd.DataFrame):
                     scaler_class().fit_transform(correlation_matrix[numerical_columns])
 
         normalized_corr_matrix_display = (normalized_corr_matrix_display - normalized_corr_matrix_display.min().min()) / (
-                normalized_corr_matrix_display.max().max() -normalized_corr_matrix_display.min().min()) * 2 - 1
+                normalized_corr_matrix_display.max().max() - normalized_corr_matrix_display.min().min()) * 2 - 1
 
         plt.figure(figsize=(10, 8))
         sns.heatmap(normalized_corr_matrix_display, annot=True, cmap='coolwarm', vmin=-1, vmax=1, fmt='.2f',
@@ -215,7 +215,7 @@ class QuickFrame(pd.DataFrame):
         if impute_modes is not None:
             for column, method in impute_modes.items():
                 preprocessed_df[column] = internal_impute_column(preprocessed_df[column], method)
-        # check reindexing !!!
+
         if corr_threshold is not None:
             correlation_matrix = preprocessed_df.corr(numeric_only=True).abs()
             upper_triangle = correlation_matrix.where(np.triu(np.ones(correlation_matrix.shape), k=1).astype(bool))
@@ -228,7 +228,7 @@ class QuickFrame(pd.DataFrame):
                 preprocessed_df.set_index(set_index_as, inplace=True)
             else:
                 raise KeyError("Inputted column does not exist in DataFrame")
-        # test for - handling non-numerical values !!!
+
         if scaler_class is not None:
             numerical_columns = preprocessed_df.select_dtypes(include=['int', 'float']).columns
             preprocessed_df[numerical_columns] = scaler_class().fit_transform(preprocessed_df[numerical_columns])
