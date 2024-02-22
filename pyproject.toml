@@ -1,0 +1,19 @@
+# pyproject.toml
+
+[tool.poetry]
+name = "QuickFrame"
+version = "0.1.0"
+description = "QuickFrame class"
+authors = ["Tomas Zisko <tom.zisko@proton.me>"]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+pandas = "^2.2.0"
+numpy = "^1.26.4"
+matplotlib = "^3.8.3"
+seaborn = "^0.13.2"
+scikit-learn = "^1.4.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
