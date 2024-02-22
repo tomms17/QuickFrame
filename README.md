@@ -11,7 +11,7 @@ data = {'A': [1, 2, 3], 'B': [4, 5, 6], 'C': [7, 8, 9]}
 quick_frame = QuickFrame(data)
 
 ## Example: Initialize QuickFrame from a CSV file
-csv_file_path = 'data.csv'  
+csv_file_path = './data.csv'  
 quick_frame_csv = QuickFrame(csv_file=csv_file_path)
 
 ## Example: Generate a normalized correlation matrix heatmap
