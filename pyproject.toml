@@ -4,6 +4,8 @@
 name = "QuickFrame"
 version = "0.1.0"
 description = "QuickFrame class"
+readme = "README.md"
+license = { file = "LICENSE" }
 authors = ["Tomas Zisko <tom.zisko@proton.me>"]
 
 [tool.poetry.dependencies]
