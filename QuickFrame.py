@@ -146,7 +146,7 @@ class QuickFrame(pd.DataFrame):
         plt.show()
 
     def preprocess_data(self, set_index_as: Union[str, List[str]] = None,
-                        corr_threshold: float = None, encode: bool = False,
+                        corr_threshold: Union[float, int] = None, encode: bool = False,
                         impute_modes: dict = None, scale_data: str = None):
         """
         Preprocess the DataFrame by handling missing values, dropping highly correlated features,
@@ -171,7 +171,6 @@ class QuickFrame(pd.DataFrame):
         Returns:
         - QuickFrame: Preprocessed QuickFrame.
         """
-        # add option to use multi level indexing
         if not isinstance(encode, bool):
             raise ValueError("'encode' must be a boolean value")
 
@@ -186,7 +185,10 @@ class QuickFrame(pd.DataFrame):
             invalid_methods = [method for method in impute_modes.values() if method not in valid_impute_methods]
             if invalid_methods:
                 raise ValueError(f"Invalid impute method(s): {', '.join(invalid_methods)}")
-        # make it eat int as well !!!
+        
+        if isinstance(corr_threshold, int):
+            corr_threshold = float(corr_threshold)
+            
         if corr_threshold is not None and not isinstance(corr_threshold, float):
             raise ValueError("'corr_threshold' must be a float value or None")
 
@@ -224,10 +226,16 @@ class QuickFrame(pd.DataFrame):
             preprocessed_df.drop(columns=columns_to_drop, inplace=True)
 
         if set_index_as is not None:
-            if set_index_as in self.columns:
-                preprocessed_df.set_index(set_index_as, inplace=True)
-            else:
-                raise KeyError("Inputted column does not exist in DataFrame")
+            if isinstance(set_index_as, str):
+                if set_index_as in preprocessed_df.columns:
+                    preprocessed_df.set_index(set_index_as, inplace=True)
+                else:
+                    raise KeyError("Inputted column does not exist in DataFrame")
+            elif isinstance(set_index_as, list):
+                if all(column in preprocessed_df.columns for column in set_index_as):
+                    preprocessed_df.set_index(set_index_as, inplace=True)
+                else:
+                    raise KeyError("Inputted columns do not exist in DataFrame")
 
         if scaler_class is not None:
             numerical_columns = preprocessed_df.select_dtypes(include=['int', 'float']).columns
