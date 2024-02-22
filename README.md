@@ -1,4 +1,5 @@
-QuickFrame: A Data Analysis and Preprocessing Toolkit
+# QuickFrame: A Data Analysis and Preprocessing Toolkit
+
 Overview
 QuickFrame is a Python class that extends the functionality of the pandas.DataFrame class with additional methods for data analysis and preprocessing. This class provides convenient tools for generating correlation matrices, counting NaN values, plotting column distributions, and performing data preprocessing tasks such as handling missing values, dropping highly correlated features, encoding categorical variables, and scaling numerical features.
 
