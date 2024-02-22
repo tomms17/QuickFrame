@@ -7,11 +7,11 @@ QuickFrame is a Python class that extends the functionality of the pandas.DataFr
 To use QuickFrame, make sure you have the required dependencies installed. You can install them using the following:
 
 ## Example: Initialize QuickFrame from data
-data = {'A': [1, 2, 3], 'B': [4, 5, 6], 'C': [7, 8, 9]}
+data = {'A': [1, 2, 3], 'B': [4, 5, 6], 'C': [7, 8, 9]}  
 quick_frame = QuickFrame(data)
 
 ## Example: Initialize QuickFrame from a CSV file
-csv_file_path = 'data.csv'
+csv_file_path = 'data.csv'  
 quick_frame_csv = QuickFrame(csv_file=csv_file_path)
 
 ## Example: Generate a normalized correlation matrix heatmap
@@ -24,12 +24,12 @@ quick_frame.nan_per_column()
 quick_frame.plot_distributions(x_axis='A', exclude='B')
 
 ## Example: Preprocess data
-preprocessed_data = quick_frame.preprocess_data(
-    set_index_as='A',
-    corr_threshold=0.5,
-    encode=True,
-    impute_modes={'B': 'mean', 'C': 'mode'},
-    scale_data='StandardScaler'
+preprocessed_data = quick_frame.preprocess_data(  
+    set_index_as='A',  
+    corr_threshold=0.5,  
+    encode=True,  
+    impute_modes={'B': 'mean', 'C': 'mode'},  
+    scale_data='StandardScaler'  
 )
 
 ## Class Methods
