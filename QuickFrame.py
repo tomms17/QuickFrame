@@ -137,7 +137,7 @@ class QuickFrame(pd.DataFrame):
                 axes[i].set_title(f'{column}')
                 axes[i].set_xlabel(f'{x_axis}')
                 axes[i].set_ylabel(column)
-                i += 1  # Increment i inside the loop
+                i += 1
 
             for j in range(i, len(axes)):
                 fig.delaxes(axes[j])
@@ -153,8 +153,8 @@ class QuickFrame(pd.DataFrame):
         and optionally encoding categorical variables and scaling numerical features.
 
         Parameters:
-        - set_index_as (str, optional): Column name to set as the index.
-        - corr_threshold (float, optional): Threshold for dropping highly correlated features.
+        - set_index_as (str or list, optional): Column name to set as the index or list of columns in case of multi-level indexing.
+        - corr_threshold (float or int, optional): Threshold for dropping highly correlated features.
         - encode (bool, optional): Whether to encode categorical variables. Default is True.
         - impute_modes (dict, optional): Dictionary specifying imputation mode for each column.
                                         Valid values: 'mean', 'mode', 'all_0', 'all_1'.
