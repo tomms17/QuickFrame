@@ -1,4 +1,36 @@
-# v0.1.0
+"""
+QuickFrame Module
+
+v0.1.0
+
+This module defines the QuickFrame class, extending pd.DataFrame with additional
+functionality for data analysis and preprocessing.
+
+Dependencies:
+- pandas (pd)
+- numpy (np)
+- matplotlib.pyplot as plt
+- seaborn as sns
+- sklearn.preprocessing: StandardScaler, RobustScaler, MinMaxScaler
+
+Classes:
+- QuickFrame(pd.DataFrame): A DataFrame class with added functionality for data analysis and preprocessing.
+
+Methods:
+- norm_corr_matrix(scale_data: str = None) -> None:
+    Generate a heatmap of the normalized correlation matrix.
+
+- nan_per_column() -> None:
+    Count the number of NaN values in each column.
+
+- plot_distributions(x_axis: str = 'index', exclude: Union[str, List[str]] = None) -> None:
+    Plot distributions of specified columns.
+
+- preprocess_data(set_index_as: Union[str, List[str]] = None, corr_threshold: Union[float, int] = None,
+                  encode: bool = True, impute_modes: dict = None, scale_data: str = None) -> QuickFrame:
+    Preprocess the DataFrame by handling missing values, dropping highly correlated features,
+    and optionally encoding categorical variables and scaling numerical features.
+"""
 from typing import Union, List
 import pandas as pd
 import numpy as np
@@ -24,7 +56,7 @@ class QuickFrame(pd.DataFrame):
                       impute_modes=None, scale_data=None): Preprocess the DataFrame.
     """
 
-    def __init__(self, data: Union[dict, List[str], np.ndarray] = None,
+    def __init__(self, data: Union[dict, List[str], np.ndarray, 'QuickFrame'] = None,
                  csv_file=None, **kwargs):
         """
         Initialize the QuickFrame by creating a DataFrame either from data or a CSV file.
@@ -70,8 +102,10 @@ class QuickFrame(pd.DataFrame):
                 normalized_corr_matrix_display[numerical_columns] = \
                     scaler_class().fit_transform(correlation_matrix[numerical_columns])
 
-        normalized_corr_matrix_display = (normalized_corr_matrix_display - normalized_corr_matrix_display.min().min()) / (
-                normalized_corr_matrix_display.max().max() - normalized_corr_matrix_display.min().min()) * 2 - 1
+        min_value = normalized_corr_matrix_display.min().min()
+        max_value = normalized_corr_matrix_display.max().max()
+        normalized_corr_matrix_display = ((normalized_corr_matrix_display - min_value) / (
+                                            max_value - min_value)) * 2 - 1
 
         plt.figure(figsize=(10, 8))
         sns.heatmap(normalized_corr_matrix_display, annot=True, cmap='coolwarm', vmin=-1, vmax=1, fmt='.2f',
@@ -154,7 +188,8 @@ class QuickFrame(pd.DataFrame):
         and optionally encoding categorical variables and scaling numerical features.
 
         Parameters:
-        - set_index_as (str or list, optional): Column name to set as the index or list of columns in case of multi-level indexing.
+        - set_index_as (str or list, optional): Column name to set as the index or list of columns
+                                                in case of multi-level indexing.
         - corr_threshold (float or int, optional): Threshold for dropping highly correlated features.
         - encode (bool, optional): Whether to encode categorical variables. Default is True.
         - impute_modes (dict, optional): Dictionary specifying imputation mode for each column.
@@ -186,10 +221,10 @@ class QuickFrame(pd.DataFrame):
             invalid_methods = [method for method in impute_modes.values() if method not in valid_impute_methods]
             if invalid_methods:
                 raise ValueError(f"Invalid impute method(s): {', '.join(invalid_methods)}")
-        
+
         if isinstance(corr_threshold, int):
             corr_threshold = float(corr_threshold)
-            
+
         if corr_threshold is not None and not isinstance(corr_threshold, float):
             raise ValueError("'corr_threshold' must be a float value or None")
 

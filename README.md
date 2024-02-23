@@ -6,7 +6,7 @@ QuickFrame is a Python class that extends the functionality of the pandas.DataFr
 ## Installation
 To use QuickFrame, make sure you have the required dependencies installed. You can install them using the following:
 
-*pip install quickframe*
+*pip install quick_frame*
 
 ## Example: Initialize QuickFrame from data
 data = {'A': [1, 2, 3], 'B': [4, 5, 6], 'C': [7, 8, 9]}  
