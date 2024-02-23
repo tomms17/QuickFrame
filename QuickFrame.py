@@ -1,3 +1,4 @@
+# v0.1.0
 from typing import Union, List
 import pandas as pd
 import numpy as np
@@ -70,7 +71,7 @@ class QuickFrame(pd.DataFrame):
                     scaler_class().fit_transform(correlation_matrix[numerical_columns])
 
         normalized_corr_matrix_display = (normalized_corr_matrix_display - normalized_corr_matrix_display.min().min()) / (
-                normalized_corr_matrix_display.max().max() -normalized_corr_matrix_display.min().min()) * 2 - 1
+                normalized_corr_matrix_display.max().max() - normalized_corr_matrix_display.min().min()) * 2 - 1
 
         plt.figure(figsize=(10, 8))
         sns.heatmap(normalized_corr_matrix_display, annot=True, cmap='coolwarm', vmin=-1, vmax=1, fmt='.2f',
@@ -137,7 +138,7 @@ class QuickFrame(pd.DataFrame):
                 axes[i].set_title(f'{column}')
                 axes[i].set_xlabel(f'{x_axis}')
                 axes[i].set_ylabel(column)
-                i += 1  # Increment i inside the loop
+                i += 1
 
             for j in range(i, len(axes)):
                 fig.delaxes(axes[j])
@@ -146,15 +147,15 @@ class QuickFrame(pd.DataFrame):
         plt.show()
 
     def preprocess_data(self, set_index_as: Union[str, List[str]] = None,
-                        corr_threshold: float = None, encode: bool = False,
+                        corr_threshold: Union[float, int] = None, encode: bool = False,
                         impute_modes: dict = None, scale_data: str = None):
         """
         Preprocess the DataFrame by handling missing values, dropping highly correlated features,
         and optionally encoding categorical variables and scaling numerical features.
 
         Parameters:
-        - set_index_as (str, optional): Column name to set as the index.
-        - corr_threshold (float, optional): Threshold for dropping highly correlated features.
+        - set_index_as (str or list, optional): Column name to set as the index or list of columns in case of multi-level indexing.
+        - corr_threshold (float or int, optional): Threshold for dropping highly correlated features.
         - encode (bool, optional): Whether to encode categorical variables. Default is True.
         - impute_modes (dict, optional): Dictionary specifying imputation mode for each column.
                                         Valid values: 'mean', 'mode', 'all_0', 'all_1'.
@@ -171,7 +172,6 @@ class QuickFrame(pd.DataFrame):
         Returns:
         - QuickFrame: Preprocessed QuickFrame.
         """
-        # add option to use multi level indexing
         if not isinstance(encode, bool):
             raise ValueError("'encode' must be a boolean value")
 
@@ -186,7 +186,10 @@ class QuickFrame(pd.DataFrame):
             invalid_methods = [method for method in impute_modes.values() if method not in valid_impute_methods]
             if invalid_methods:
                 raise ValueError(f"Invalid impute method(s): {', '.join(invalid_methods)}")
-        # make it eat int as well !!!
+        
+        if isinstance(corr_threshold, int):
+            corr_threshold = float(corr_threshold)
+            
         if corr_threshold is not None and not isinstance(corr_threshold, float):
             raise ValueError("'corr_threshold' must be a float value or None")
 
@@ -224,10 +227,16 @@ class QuickFrame(pd.DataFrame):
             preprocessed_df.drop(columns=columns_to_drop, inplace=True)
 
         if set_index_as is not None:
-            if set_index_as in self.columns:
-                preprocessed_df.set_index(set_index_as, inplace=True)
-            else:
-                raise KeyError("Inputted column does not exist in DataFrame")
+            if isinstance(set_index_as, str):
+                if set_index_as in preprocessed_df.columns:
+                    preprocessed_df.set_index(set_index_as, inplace=True)
+                else:
+                    raise KeyError("Inputted column does not exist in DataFrame")
+            elif isinstance(set_index_as, list):
+                if all(column in preprocessed_df.columns for column in set_index_as):
+                    preprocessed_df.set_index(set_index_as, inplace=True)
+                else:
+                    raise KeyError("Inputted columns do not exist in DataFrame")
 
         if scaler_class is not None:
             numerical_columns = preprocessed_df.select_dtypes(include=['int', 'float']).columns
